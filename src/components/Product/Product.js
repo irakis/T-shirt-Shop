@@ -3,6 +3,7 @@ import Button from '../Button/Button';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import shortid from 'shortid';
+import clsx from 'clsx';
 
 const Product = (props) => {
   const [currentProduct, /*setCurrentProduct*/] = useState({
@@ -45,13 +46,13 @@ const Product = (props) => {
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
-              {props.data.sizes.map(size => <Button key={shortid()}>{size.name}</Button>)}
+              {props.data.sizes.map(size => <Button className={currentProduct.currentSize === size.name && styles.active} key={shortid()}>{size.name}</Button>)}
             </ul>
           </div>
           <div className={styles.colors}>
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
-              {props.data.colors.map(color => <Button className={getColorClassName(color)} key={shortid()}>{color}</Button>)}
+              {props.data.colors.map(color => <Button className={clsx(getColorClassName(color), color === currentProduct.currentColor && styles.active)} key={shortid()}>{color}</Button>)}
             </ul>
           </div>
           <Button className={styles.button}>
