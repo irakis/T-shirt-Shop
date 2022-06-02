@@ -1,4 +1,4 @@
-import styles from './Product.module.scss';
+import styles from '../Product/Product.module.scss';
 import clsx from 'clsx';
 import shortid from 'shortid';
 

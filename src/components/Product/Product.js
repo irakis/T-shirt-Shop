@@ -2,8 +2,7 @@ import styles from './Product.module.scss';
 import Button from '../Button/Button';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import ButtonForSizes from '../ButtonForSizes/ButtonForSizes';
-import ButtonForColors from '../ButtonForColors/ButtonForColors';
+import shortid from 'shortid';
 
 const Product = (props) => {
   const [currentProduct, /*setCurrentProduct*/] = useState({
@@ -13,6 +12,21 @@ const Product = (props) => {
   })
 
   console.log(currentProduct);
+
+  const getColorClassName = (colorName) => {
+    switch (colorName) {
+      case 'blue':
+        return styles.colorBlue;
+      case 'red':
+        return styles.colorRed;
+      case 'green':
+        return styles.colorGreen;
+      case 'white':
+        return styles.colorWhite;
+      case 'black':
+        return styles.colorBlack;
+    }
+  }
 
   return (
     <article className={styles.product}>
@@ -31,20 +45,13 @@ const Product = (props) => {
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
-              <ButtonForSizes sizeData={props.data.sizes} />
+              {props.data.sizes.map(size => <Button key={shortid()}>{size.name}</Button>)}
             </ul>
           </div>
           <div className={styles.colors}>
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
-              <ButtonForColors colorData={props.data.colors}/>
-
-                {/* <li><button type="button" className={clsx(styles.colorBlack, styles.active)} /></li>
-              <li><button type="button" className={clsx(styles.colorRed)} /></li>
-              <li><button type="button" className={clsx(styles.colorWhite)} /></li>
-              */}
-
-
+              {props.data.colors.map(color => <Button className={getColorClassName(color)} key={shortid()}>{color}</Button>)}
             </ul>
           </div>
           <Button className={styles.button}>
