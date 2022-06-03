@@ -6,13 +6,25 @@ import shortid from 'shortid';
 import clsx from 'clsx';
 
 const Product = (props) => {
-  const [currentProduct, /*setCurrentProduct*/] = useState({
+  const [currentProduct, setCurrentSize, setCurrentColor] = useState({
     currentColor: props.data.colors[0],
     currentSize: props.data.sizes[0].name,
     currentChoise: 'false',
-  })
+  });
 
-  console.log(currentProduct);
+  const handleColor =(color)=>{ 
+    //e.preventDefault();
+    console.log('co dostaje handleColor? ', color);
+    setCurrentColor(currentProduct.currentColor === color)
+  };
+
+  const handleSize =(size)=>{
+    console.log('co dostaje handleSize? ',size);
+    //e.preventDefault();
+    setCurrentSize(currentProduct.currentSize === size)
+  };
+
+  console.log('this is currentPoduct: ', currentProduct);
 
   const getColorClassName = (colorName) => {
     switch (colorName) {
@@ -26,6 +38,7 @@ const Product = (props) => {
         return styles.colorWhite;
       case 'black':
         return styles.colorBlack;
+      //no default
     }
   }
 
@@ -46,13 +59,16 @@ const Product = (props) => {
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
-              {props.data.sizes.map(size => <Button className={currentProduct.currentSize === size.name && styles.active} key={shortid()}>{size.name}</Button>)}
+              {props.data.sizes.map(size => <Button
+                className={currentProduct.currentSize === size.name && styles.active}
+                action={handleSize} key={shortid()}>{size.name}</Button>)}
             </ul>
           </div>
           <div className={styles.colors}>
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
-              {props.data.colors.map(color => <Button className={clsx(getColorClassName(color), color === currentProduct.currentColor && styles.active)} key={shortid()}>{color}</Button>)}
+              {props.data.colors.map(color => <Button className={clsx(getColorClassName(color), color === currentProduct.currentColor && styles.active)}
+                action={handleColor} key={shortid()}>{color}</Button>)}
             </ul>
           </div>
           <Button className={styles.button}>
