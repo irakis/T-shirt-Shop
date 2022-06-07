@@ -8,7 +8,9 @@ import clsx from 'clsx';
 const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.data.colors[0]);
   const [currentSize, setCurrentSize] = useState(props.data.sizes[0].name);
-  console.log('props: ', props)
+  const [currentPrice, setCurrentPrice] = useState(props.data.basePrice);
+  const [totalPrice, setPrice] = useState([0]);
+
 
   const handleColor = (color) => {
     setCurrentColor(color)
@@ -18,8 +20,17 @@ const Product = (props) => {
     setCurrentSize(size);
   };
 
-  console.log('this is currentSize: ', currentSize);
-  console.log('this is currentColor: ', currentColor);
+  const handelPrice = (price) => {
+    setPrice(price)
+  };
+
+  const handleAll = (action, addPrice) => {
+    handleSize(action);
+    handelPrice(addPrice);
+  }
+
+  console.log('totalPrice: ', totalPrice);
+
 
   const getColorClassName = (colorName) => {
     switch (colorName) {
@@ -48,7 +59,7 @@ const Product = (props) => {
       <div>
         <header>
           <h2 className={styles.name}>{props.data.title}</h2>
-          <span className={styles.price}>Price{props.data.basePrice + '$'}</span>
+          <span className={styles.price}>Price: {parseInt(props.data.basePrice) + parseInt(totalPrice) + '$'}</span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -56,14 +67,14 @@ const Product = (props) => {
             <ul className={styles.choices}>
               {props.data.sizes.map(size => <Button
                 className={currentSize === size.name && styles.active}
-                action={handleSize} key={shortid()}>{size.name}</Button>)}
+                action={() => handleAll(size.name, size.additionalPrice)} key={shortid()}>{size.name}</Button>)}
             </ul>
           </div>
           <div className={styles.colors}>
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
               {props.data.colors.map(color => <Button className={clsx(getColorClassName(color), color === currentColor && styles.active)}
-                action={handleColor} key={shortid()}>{color}</Button>)}
+                action={() => handleColor(color)} key={shortid()}>{color}</Button>)}
             </ul>
           </div>
           <Button className={styles.button}>
