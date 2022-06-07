@@ -9,7 +9,8 @@ const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.data.colors[0]);
   const [currentSize, setCurrentSize] = useState(props.data.sizes[0].name);
   const [currentPrice, setCurrentPrice] = useState(props.data.basePrice);
-  const [totalPrice, setPrice] = useState([0]);
+  const [subTotalPrice, setPrice] = useState([0]);
+  const [name, setName] = useState([0]);
 
 
   const handleColor = (color) => {
@@ -24,13 +25,11 @@ const Product = (props) => {
     setPrice(price)
   };
 
-  const handleAll = (action, addPrice) => {
+  const handleAll = (action, addPrice, title) => {
     handleSize(action);
     handelPrice(addPrice);
-  }
-
-  console.log('totalPrice: ', totalPrice);
-
+    setName(title);
+  };
 
   const getColorClassName = (colorName) => {
     switch (colorName) {
@@ -46,7 +45,24 @@ const Product = (props) => {
         return styles.colorBlack;
       //no default
     }
-  }
+  };
+
+  const sumPrice = (base, additional) => {
+    const finalSum = parseInt(base) + parseInt(additional);
+    return (
+      finalSum
+    );
+  };
+
+  const displayBasket = () => {
+
+    return (
+      console.log('Name: ', name),
+      console.log('Price: ', sumPrice(currentPrice, subTotalPrice)),
+      console.log('Size: ', currentSize),
+      console.log('Color: ', currentColor)
+    )
+  };
 
   return (
     <article className={styles.product}>
@@ -59,7 +75,7 @@ const Product = (props) => {
       <div>
         <header>
           <h2 className={styles.name}>{props.data.title}</h2>
-          <span className={styles.price}>Price: {parseInt(props.data.basePrice) + parseInt(totalPrice) + '$'}</span>
+          <span className={styles.price}>Price: {sumPrice(props.data.basePrice, subTotalPrice) + '$'}</span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -67,7 +83,7 @@ const Product = (props) => {
             <ul className={styles.choices}>
               {props.data.sizes.map(size => <Button
                 className={currentSize === size.name && styles.active}
-                action={() => handleAll(size.name, size.additionalPrice)} key={shortid()}>{size.name}</Button>)}
+                action={() => handleAll(size.name, size.additionalPrice, props.data.title)} key={shortid()}>{size.name}</Button>)}
             </ul>
           </div>
           <div className={styles.colors}>
@@ -77,7 +93,7 @@ const Product = (props) => {
                 action={() => handleColor(color)} key={shortid()}>{color}</Button>)}
             </ul>
           </div>
-          <Button className={styles.button}>
+          <Button className={styles.button} action={displayBasket}>
             <span className="fa fa-shopping-cart" />
           </Button>
         </form>
