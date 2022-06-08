@@ -2,9 +2,9 @@ import styles from './Product.module.scss';
 import Button from '../Button/Button';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import shortid from 'shortid';
-import clsx from 'clsx';
 import ProductImage from '../ProductImage/ProductImage';
+import OptionColor from '../OptionColor/OptionColor';
+import OptionSize from '../OptionSize/OptionSize';
 
 const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.data.colors[0]);
@@ -30,22 +30,6 @@ const Product = (props) => {
     handleSize(action);
     handelPrice(addPrice);
     setName(title);
-  };
-
-  const getColorClassName = (colorName) => {
-    switch (colorName) {
-      case 'blue':
-        return styles.colorBlue;
-      case 'red':
-        return styles.colorRed;
-      case 'green':
-        return styles.colorGreen;
-      case 'white':
-        return styles.colorWhite;
-      case 'black':
-        return styles.colorBlack;
-      //no default
-    }
   };
 
   const sumPrice = (base, additional) => {
@@ -74,21 +58,8 @@ const Product = (props) => {
           <span className={styles.price}>Price: {sumPrice(props.data.basePrice, subTotalPrice) + '$'}</span>
         </header>
         <form>
-          <div className={styles.sizes}>
-            <h3 className={styles.optionLabel}>Sizes</h3>
-            <ul className={styles.choices}>
-              {props.data.sizes.map(size => <Button
-                className={currentSize === size.name && styles.active}
-                action={() => handleAll(size.name, size.additionalPrice, props.data.title)} key={shortid()}>{size.name}</Button>)}
-            </ul>
-          </div>
-          <div className={styles.colors}>
-            <h3 className={styles.optionLabel}>Colors</h3>
-            <ul className={styles.choices}>
-              {props.data.colors.map(color => <Button className={clsx(getColorClassName(color), color === currentColor && styles.active)}
-                action={() => handleColor(color)} key={shortid()}>{color}</Button>)}
-            </ul>
-          </div>
+          <OptionSize sizeData={props} size={currentSize} action={handleAll} />
+          <OptionColor optionsData={props} color={currentColor} action={handleColor} />
           <Button className={styles.button} action={displayBasket}>
             <span className="fa fa-shopping-cart" />
           </Button>
