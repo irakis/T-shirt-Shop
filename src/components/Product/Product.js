@@ -1,6 +1,6 @@
 import styles from './Product.module.scss';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import ProductImage from '../ProductImage/ProductImage';
 import ProductOptions from '../ProductOptions/ProductOptions';
 
@@ -33,6 +33,7 @@ const Product = (props) => {
 
   const sumPrice = (base, additional) => {
     const finalSum = parseInt(base) + parseInt(additional);
+    console.log('finalSum', finalSum);
     return (
       finalSum
     );
@@ -54,7 +55,8 @@ const Product = (props) => {
       <div>
         <header>
           <h2 className={styles.name}>{props.data.title}</h2>
-          <span className={styles.price}>Price: {sumPrice(props.data.basePrice, subTotalPrice) + '$'}</span>
+          <span className={styles.price}>Price: {
+            useMemo(() => { return sumPrice(props.data.basePrice, subTotalPrice) }, [subTotalPrice]) + '$'}</span>
         </header>
         <ProductOptions formData={props} formColor={currentColor} formSize={currentSize}
           actionAll={handleAll} actionColor={handleColor} actionDisplay={displayBasket} />
