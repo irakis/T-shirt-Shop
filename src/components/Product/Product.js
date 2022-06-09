@@ -1,10 +1,9 @@
 import styles from './Product.module.scss';
-import Button from '../Button/Button';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import ProductImage from '../ProductImage/ProductImage';
-import OptionColor from '../OptionColor/OptionColor';
-import OptionSize from '../OptionSize/OptionSize';
+import ProductOptions from '../ProductOptions/ProductOptions';
+
 
 const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.data.colors[0]);
@@ -57,18 +56,13 @@ const Product = (props) => {
           <h2 className={styles.name}>{props.data.title}</h2>
           <span className={styles.price}>Price: {sumPrice(props.data.basePrice, subTotalPrice) + '$'}</span>
         </header>
-        <form>
-          <OptionSize sizeData={props} size={currentSize} action={handleAll} />
-          <OptionColor optionsData={props} color={currentColor} action={handleColor} />
-          <Button className={styles.button} action={displayBasket}>
-            <span className="fa fa-shopping-cart" />
-          </Button>
-        </form>
+        <ProductOptions formData={props} formColor={currentColor} formSize={currentSize}
+          actionAll={handleAll} actionColor={handleColor} actionDisplay={displayBasket} />
       </div>
     </article>
   )
 }
 
-Product.propTypes = { props: PropTypes.string };
+Product.propTypes = { props: PropTypes.object };
 
 export default Product;
